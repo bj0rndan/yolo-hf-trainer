@@ -1,0 +1,62 @@
+# Configuración del modelo
+model: "yolov8s.pt"
+task: "detect"
+
+# Datos
+data: "/home/jovyan/work/isr-innovation/isr-oit-acerinox-cs6-images/data/data.yaml"
+project: "jupyterhub_demo"
+
+# Parámetros de entrenamiento
+batch: 8
+# Valores posibles [2, 4, 8, 16, 32, 64], valores recomendados [8, 16, 32]
+epochs: 300
+# Valores posibles [5-inf], valores recomendados [50, 100, 150, 200, 300]
+imgsz: 640
+# Valores posibles [320, 640, 1280, 2560], valores recomendados [640, 1280]
+patience: 50
+# Valores posibles [depende del epochs], valores recomendados [10-20% del epochs]
+
+# Optimización
+optimizer: "SGD"
+# Valores posibles ["SGD", "Adam", "AdamW"], valores recomendados ["SGD" para simplicidad o "Adam" para estabilidad]
+lr0: 0.0001
+# Valor recomendado en el rango [0.0001, 0.01], depende del optimizador
+lrf: 0.00001
+# Valor recomendado entre [0.00001-0.1], afecta la velocidad de reducción del learning rate
+cos_lr: true
+# true para usar Cosine Annealing, false para una tasa de aprendizaje constante
+weight_decay: 0.01
+# Valores recomendados [0.0001, 0.01], alto reduce overfitting, bajo aumenta flexibilidad
+
+# Aumentación y regularización
+augment: false
+# true para agregar aumentación de datos, recomendado para evitar sobreajuste
+dropout: 0.2
+# Valores recomendados [0, 0.1, 0.2], incrementa la regularización para redes profundas
+
+# Configuración de pérdida
+box: 5.5
+# Valores recomendados [1-10], afecta la importancia de la precisión de las cajas
+cls: 5.5
+# Valores recomendados [1-10], afecta la precisión de la clasificación
+dfl: 1.5
+# Valores recomendados [0-5], ajusta la suavidad en detecciones pequeñas
+iou: 0.6
+# Valores recomendados [0.2-0.9], controla el umbral de coincidencia de boxes para detección
+
+# Otras configuraciones
+save_json: true
+# true para guardar resultados como JSON
+pretrained: true
+# true para usar pesos preentrenados, false para entrenamiento desde cero
+single_cls: false
+# true para tareas de una sola clase, false para multiclasificación
+device: 0
+# Selección del dispositivo: 0 para CPU, 1 en adelante para GPUs específicas
+cache: false
+# true para cargar los datos en memoria, útil para datasets pequeños
+verbose: true
+# true para mostrar detalles durante el entrenamiento, false para menos detalles
+
+# Clases específicas (opcional)
+# classes: [1, 2, 5, 9]
