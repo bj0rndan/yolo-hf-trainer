@@ -21,12 +21,17 @@ git clone <URL-del-repositorio>
 cd yolo-hf-trainer
 ```
 
-2. Ejecutar instalación de requirements.txt en tu entorno conda creado. (con conda install no se instalan algunos paquetes):
+2. Ejecutar instalación del entorno utilizando el fichero environment.yml
 ```bash
-bash pip install -r requirements.txt
+conda env create --name envname --file=environment.yml
 ```
 
-3. Configurar credenciales:
+2.1 (Si el punto 2 da problemas) Ejecutar instalación de requirements.txt en tu entorno conda utilizando PIP:
+```bash
+pip install -r requirements.txt
+```
+
+3. Configurar credenciales (❗WORK IN PROGRESS❗):
 - Modificar `credentials.json` para cada usuario personalmente
 - Añadir tu API key de HuggingFace en el archivo
 - Añadir tu API key de CometML en el archivo
