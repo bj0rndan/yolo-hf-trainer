@@ -21,9 +21,9 @@ git clone <URL-del-repositorio>
 cd yolo-hf-trainer
 ```
 
-2. Ejecutar script de instalación:
+2. Ejecutar instalación de requirements.txt en tu entorno conda creado. (con conda install no se instalan algunos paquetes):
 ```bash
-bash setup.sh
+bash pip install -r requirements.txt
 ```
 
 3. Configurar credenciales:
