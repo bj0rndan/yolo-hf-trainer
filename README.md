@@ -31,11 +31,21 @@ conda env create --name envname --file=environment.yml
 pip install -r requirements.txt
 ```
 
-3. Configurar credenciales (❗WORK IN PROGRESS❗):
-- Modificar `credentials.json` para cada usuario personalmente
-- Añadir tu API key de HuggingFace en el archivo
-- Añadir tu API key de CometML en el archivo
-
+3. Necesitas añadir las variables de entorno para tu entorno conda para el correcto funcionamiento.
+* Añadir las variables nuevas❗
+  ```bash
+  conda env config vars set COMET_API_KEY="introduce tu clave"
+  conda env config vars set HF_API_KEY="introduce tu clave"
+  ```
+* Puedes ver las variables definidas de entorno:
+  ```bash
+  conda env config vars list -n myenv
+  ```
+* O también quitar algunas:
+  ```bash
+  conda env config vars unset COMET_API_KEY -n nombre_de_entorno
+  ```
+  
 ## 💻 Uso
 
 ### Carga del dataset
@@ -45,7 +55,7 @@ python load_and_process.py
 
 ### Entrenamiento Básico
 ```bash
-python yolo_trainer.py --config yolo_config.yaml --comet-key your_api_key --comet-project your_cometml_project_name
+python yolo_trainer.py --config yolo_config.yaml
 ```
 
 ## 🛠️ Funcionalidades Principales
