@@ -3,7 +3,7 @@
 Sistema automatizado para entrenamiento de modelos YOLO utilizando datasets de HuggingFace.
 
 ## 📋 Descripción
-Esta herramienta permite entrenar modelos YOLO de manera sencilla utilizando datasets almacenados en HuggingFace, incluyendo datasets privados si se dispone de las credenciales necesarias. Diseñada específicamente para usuarios sin experiencia técnica en IA.
+Esta herramienta permite entrenar modelos YOLO de manera sencilla utilizando datasets almacenados en HuggingFace, incluyendo datasets privados si se dispone de las credenciales necesarias. Diseñada específicamente para usuarios sin experiencia técnica profunda en IA.
 
 ## 🚀 Inicio Rápido
 
