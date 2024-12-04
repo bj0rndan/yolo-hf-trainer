@@ -4,6 +4,8 @@ task: "detect"
 
 # Datos
 data: "/home/jovyan/work/isr-innovation/isr-oit-acerinox-cs6-images/data/data.yaml"
+#Directorio de dataset en general
+dataset_dir: "/home/jovyan/work/isr-innovation/isr-oit-acerinox-cs6-images/data" 
 project: "jupyterhub_demo"
 
 # Parámetros de entrenamiento

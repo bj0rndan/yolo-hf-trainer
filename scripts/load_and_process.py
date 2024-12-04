@@ -44,9 +44,9 @@ class DatasetProcessor:
         print("\n=== Descargador y Procesador de Datasets de Hugging Face ===\n")
 
         # Get API key
-        api_key = input("Ingresa tu Hugging Face API key (consulta https://huggingface.co/settings/tokens): ").strip()
+        api_key = os.environ.get("HF_API_KEY")
         if not api_key:
-            print("Error: Se requiere una API key válida.")
+            print("Error: Se requiere una API key válida. El API key se coge de las variables de entorno de Conda. puedes consultar las variables de entorno actuales con conda env config vars list -n myenv")
             return False
 
         # Login to Hugging Face

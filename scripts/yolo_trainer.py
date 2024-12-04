@@ -18,7 +18,7 @@ class YOLOTrainer:
         """
         self.config = config
         self.model = None
-        self.comet_api_key = None
+        self.comet_api_key = os.environ.get("COMET_API_KEY")
         self.comet_project = None
         
     def setup_comet(self) -> bool:
