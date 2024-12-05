@@ -2,6 +2,9 @@ import os
 import sys
 import yaml
 import argparse
+import glob
+from collections import defaultdict
+import tempfile
 from pathlib import Path
 import traceback
 from typing import Dict, Any
@@ -56,11 +59,44 @@ class YOLOTrainer:
         except Exception as e:
             print(f"Error al cargar el modelo: {str(e)}")
             return False
-    
+        
     def train(self, task: str = "detect") -> None:
         """
         Entrena el modelo con los parámetros configurados
         """
+        def log_instances(data_dir: str, experiment: comet_ml.Experiment):
+
+            with open(os.path.join(data_dir, "data.yaml"), "r") as f:
+                id_class_mapping = yaml.safe_load(f)["names"]
+
+            classes = defaultdict(lambda: defaultdict(int))
+            splits = set()
+            for file_path in glob.glob(os.path.join(data_dir, "**", "*.txt"), recursive=True):
+                split = os.path.basename(os.path.dirname(os.path.dirname(file_path)))
+                splits.add(split)
+                with open(file_path, "r") as f:
+                    for line in f.readlines():
+                        class_id = int(line.split(" ")[0])
+                        classes[id_class_mapping[class_id]][split] += 1
+                        
+            splits = list(splits)
+            
+            with tempfile.TemporaryDirectory() as temp_dir:
+                temp_file_path = os.path.join(temp_dir, "instances.csv")
+                with open(temp_file_path, "w") as f:
+                    f.write(",".join(["defect", *splits, "total"]) + "\n")
+                    for defect, distro in classes.items():
+                        f.write(f"{defect}")
+                        total = 0
+                        for split in splits:
+                            f.write(f",{distro[split]}")
+                            total += distro[split]
+                        f.write(f",{total}\n")
+
+                experiment.log_table(temp_file_path, headers=True)
+
+            return 
+
         if not self.model:
             print("Error: No se ha cargado ningún modelo")
             return
@@ -101,7 +137,9 @@ class YOLOTrainer:
             print("\nIniciando entrenamiento con los siguientes parámetros:")
             for key, value in train_args.items():
                 print(f"{key}: {value}")
-                
+            
+            experiment = comet_ml.Experiment(project_name="nombre-proyecto")
+            log_instances(self.config.get("dataset_dir", ""), experiment)
             results = self.model.train(**train_args)
             print("\n¡Entrenamiento completado!")
             
