@@ -7,8 +7,9 @@ from tqdm import tqdm
 from pathlib import Path
 import traceback
 from typing import Set, List, Tuple
-from huggingface_hub import dataset_info
+from huggingface_hub import dataset_info, HfApi, list_datasets
 from huggingface_hub.repocard import RepoCard
+import inquirer
 
 
 
@@ -29,6 +30,37 @@ class DatasetProcessor:
         classes_raw = card_data.isr.get("classes", {})
         return {int(k): v for k, v in classes_raw.items()}
     
+    def dataset_choice(self):
+        dataset_names = []
+        hf_api = HfApi(
+            endpoint="https://huggingface.co", # Can be a Private Hub endpoint.
+            token=os.environ.get("HF_API_KEY"), # Token is not persisted on the machine.
+        )
+
+        for i in hf_api.list_datasets(author='isr-innovation'):
+            dataset_names.append(i.id)
+
+        try:
+            questions = [
+                inquirer.List(
+                    'dataset',
+                    message="Elige el dataset disponible",
+                    choices=dataset_names,
+                ),
+            ]
+
+            answers = inquirer.prompt(questions)
+
+            if answers:
+                selected_dataset = answers['dataset']
+                print(f"\n✅ Dataset elegido: {selected_dataset}")
+                
+        except KeyboardInterrupt:
+            print("\n❌ Dataset selection cancelled.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+        return selected_dataset
+
     def download_dataset(self) -> bool:
         """
         Descarga el dataset de Hugging Face
@@ -56,8 +88,7 @@ class DatasetProcessor:
             print(f"Error al iniciar sesión en Hugging Face: {str(e)}")
             return False
 
-        # Get dataset name
-        self.dataset_name = input("\nIngresa la ruta del dataset de Hugging Face (ej. isr-innovation/isr-oit-smartbar-images): ").strip()
+        self.dataset_name = self.dataset_choice()
         if not self.dataset_name:
             print("Error: Se requiere un nombre de dataset válido.")
             return False
