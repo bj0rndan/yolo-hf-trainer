@@ -29,15 +29,17 @@ class YOLOTrainer:
         Configura CometML con las credenciales proporcionadas
         """
         if not self.comet_api_key:
-            self.comet_api_key = input("Ingresa tu API key de CometML: ").strip()
+            self.comet_api_key = os.environ.get("COMET_API_KEY")
             if not self.comet_api_key:
-                print("Error: Se requiere una API key válida de CometML")
+                print("Error: El API KEY de CometML introducido como variable del entorno no es válido.")
+                self.comet_api_key = input("Ingresa tu API key de CometML manualmente: ").strip()
                 return False
                 
         if not self.comet_project:
-            self.comet_project = input("Ingresa el nombre del proyecto en CometML: ").strip()
+            self.comet_project = self.config.get("project", "yolo_project")
             if not self.comet_project:
-                print("Error: Se requiere un nombre de proyecto válido")
+                print("Error: El project de CometML introducido en el config no es válido.")
+                self.comet_project = input("Ingresa el nombre del proyecto en CometML manualmente: ").strip()
                 return False
         
         try:
@@ -76,8 +78,11 @@ class YOLOTrainer:
                 splits.add(split)
                 with open(file_path, "r") as f:
                     for line in f.readlines():
-                        class_id = int(line.split(" ")[0])
-                        classes[id_class_mapping[class_id]][split] += 1
+                        if line.split(" ")[0] != "None":
+                            class_id = int(line.split(" ")[0])
+                            classes[id_class_mapping[class_id]][split] += 1
+                        else:
+                            continue
                         
             splits = list(splits)
             
