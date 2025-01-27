@@ -187,6 +187,8 @@ class DatasetProcessor:
                 with open(fr'{self.paths["valid_labels"]}/{label_fname}', "w") as file:
                     for j in range(len(annotations)):
                         label = labels[j]
+                        if label == "Unknown":
+                            continue
                         x = annotations[j][0] / 100
                         y = annotations[j][1] / 100
                         h = annotations[j][3] / 100
@@ -201,6 +203,8 @@ class DatasetProcessor:
                 with open(fr'{self.paths["train_labels"]}/{label_fname}', "w") as file:
                     for j in range(len(annotations)):
                         label = labels[j]
+                        if label == "Unknown":
+                            continue
                         x = annotations[j][0] / 100
                         y = annotations[j][1] / 100
                         h = annotations[j][3] / 100
