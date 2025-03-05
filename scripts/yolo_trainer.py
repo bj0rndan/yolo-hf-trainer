@@ -143,7 +143,7 @@ class YOLOTrainer:
             for key, value in train_args.items():
                 print(f"{key}: {value}")
             
-            experiment = comet_ml.Experiment(project_name="nombre-proyecto")
+            experiment = comet_ml.start(project_name=train_args['project'])
             log_instances(self.config.get("dataset_dir", ""), experiment)
             results = self.model.train(**train_args)
             print("\n¡Entrenamiento completado!")
