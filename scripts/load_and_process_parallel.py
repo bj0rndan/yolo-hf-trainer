@@ -220,7 +220,7 @@ class DatasetProcessor:
         # Save image with it's extension, conserve the 100 quality
         image_path = os.path.join(output_path, image_fname)
         image_ext = image_fname.split(".")[-1]
-        label_fname = f"{image_fname.rstrip(f'.{image_ext}')}.txt"
+        label_fname = f"{image_fname.removesuffix(f'.{image_ext}')}.txt"
         image.save(image_path, quality=100)
         
         # Process the labels
